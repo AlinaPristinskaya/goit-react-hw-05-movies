@@ -1,10 +1,12 @@
 
-import React,{useEffect,useState} from 'react';
+import React,{useEffect,useState,} from 'react';
 import API from '../../API';
+import {Link} from 'react-router-dom'
 
 
 const HomePage=()=> {
     const [dataSet,setDataSet]=useState([]);
+
 
     useEffect(() => {
          getFetch();    
@@ -15,16 +17,12 @@ const HomePage=()=> {
                  
         API.fetchAPI()
          .then(data=>{
-             console.log(data);
              setDataSet(prev=>([...data.results]))
          })     
         .catch(error=>(error))    
         
       }
-    console.log(dataSet)  
-
-   
-        
-   return (<>{dataSet && dataSet.map(film=><li key={film.id}>{film.title}</li>)}</>)
+            
+   return (<>{dataSet && dataSet.map(film=><li key={film.id}><Link to={`/movies/${film.id}`}>{film.title}</Link></li>)}</>)
 }
 export default HomePage;
