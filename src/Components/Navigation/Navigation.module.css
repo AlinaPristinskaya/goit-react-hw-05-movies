@@ -1,0 +1,17 @@
+.Navigation {
+    display: flex;
+    align-items: center;
+    min-height: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .NavLink {
+    margin: 10px;
+    color: darkblue;
+   
+  }
+  .NavLinkActive{
+    color:brown;  
+  }

@@ -1,0 +1,16 @@
+.foto{
+    display: flex;
+    align-items: center;
+    min-height: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-bottom: 1px solid #ccc;
+
+}
+.img{
+    width: 100px;
+}
+.item{
+ display: block;
+ margin: 20px;
+}

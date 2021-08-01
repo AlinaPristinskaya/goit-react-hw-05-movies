@@ -1,17 +1,20 @@
-import React from 'react';
+import React,{lazy, Suspense} from 'react';
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Navigation from './Components/Navigation';
-import HomePage from './Components/HomePage';
-import MoviesPage from './Components/MoviesPage';
 import {Route,Switch} from 'react-router-dom';
-import MovieDetailsPage from './Components/MovieDetailsPage';
+import Navigation from './Components/Navigation';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from './Components/Loader';
 
+const HomePage=lazy(()=>import('./Components/HomePage' /*webpackChunkName: "homePage"*/));
+const MoviesPage=lazy(()=>import('./Components/MoviesPage' /*webpackChunkName: "MoviePage"*/));
+const MovieDetailsPage= lazy(()=>import('./Components/MovieDetailsPage' /*webpackChunkName: "MovieDetaliesPage"*/))
 
 
 const App=()=>(<>
     <ToastContainer autoClose={3000} />
     <Navigation/>
+    <Suspense fallback={<Loader/>}>
     <Switch>
     <Route path="/" exact>
         <HomePage/>
@@ -19,13 +22,13 @@ const App=()=>(<>
     <Route path="/movies" exact>
         <MoviesPage/>
     </Route>
-    <Route path='/movies/:moviesId'>
+    <Route path='/movies/:slug'>
         <MovieDetailsPage/>
     </Route>
     
 
     </Switch>
-    
+    </Suspense>
     </>
 
 )

@@ -1,38 +1,75 @@
-import React,{useState} from 'react';
+import React,{Suspense, useEffect, useState, lazy} from 'react';
 import {toast } from 'react-toastify';
 import ApiQuery from '../../API/ApiQuery';
-import {Link} from 'react-router-dom'
+import { useHistory, useLocation} from 'react-router-dom';
+import Loader from '../Loader';
+
+
+
+
+const List =lazy(()=>import('../List'))
+
 
 const MoviesPage=()=> {
-    const[query, setQuery]=useState('');
-    const[data, setData]=useState([])
+    const[query, setQuery]=useState(()=>{
+      return JSON.parse(sessionStorage.getItem('query'))??''
+    });
+    const[data, setData]=useState(()=>{
+      return JSON.parse(sessionStorage.getItem('data'))??[]
+    });
+    const [loader, setLoader]=useState(false);
+
+
+    const history=useHistory();
+    const location=useLocation();
     
 
+    useEffect(()=>{
+      sessionStorage.setItem('data', JSON.stringify(query))
+      sessionStorage.setItem('data', JSON.stringify(data))
+      session();
+      // eslint-disable-next-line 
+    },[data])
+
+  
+
+     
     const handelChange=event=>{
-        setQuery(event.currentTarget.value)
-      }
+      setQuery(event.currentTarget.value)
+    }
     
     const handelSubmit=event=>{
       event.preventDefault();
       if(query.trim() === ''){
           toast('Введите что хотите найти');
           return
-      } getFetchQuery(query);
-        setQuery('');
-        setData(null); }
+      }
+        getFetchQuery(query);
+    }
+
+
+    const session=()=>{
+      if (query){
+        history.push({
+          ...location,
+          search:`query=${query}`})}
+    } 
+
 
     const  getFetchQuery=()=>{
+      setData([]);
+      setLoader(true);
         ApiQuery.fetchAPIQuery(query)
-        .then(data=>{
-            if(data.total_results===0){
+        .then(res=>{
+            if(res.total_results===0){
                 toast.error('Ничего не найденно по вашему запросу.Введите коректный запрос')
 
-            }            
-            setData(data.results);            
-              })
-
+            } 
+            setLoader(false)           
+            setData(res.results);
+            setQuery('');})
     } 
-    
+  
   return (
     <>
       
@@ -49,8 +86,10 @@ const MoviesPage=()=> {
         autoFocus
         />
        </form>
-       {data &&<ul>{data.map(item=><li key={item.id}><Link to={`/movies/${item.id}`}>{item.title}</Link></li>)}</ul>}
-      
+       {loader&&<Loader/>}
+       <Suspense fallback={<Loader/>}>
+       {data&&<List data={data} />}
+       </Suspense>
     </>
   );
   }
