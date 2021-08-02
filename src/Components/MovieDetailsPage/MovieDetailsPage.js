@@ -21,7 +21,8 @@ const MovieDetailsPage=()=> {
 
     const location=useLocation();
     const history= useHistory();
-    
+    console.log(history);
+    console.log(location);
     const moviesId=slug.match(/[a-z0-9]+$/)[0];
     
 
@@ -67,9 +68,7 @@ const MovieDetailsPage=()=> {
     } 
 
     const goBack=()=>{        
-        history.push({pathname:'/movies',
-                      search:location.state.search
-    });
+        history.push(location.state.from ||'/');
     }         
    
     return <> 
