@@ -67,8 +67,13 @@ const MovieDetailsPage=()=> {
                 setReviews(data.results)})
     } 
 
-    const goBack=()=>{        
-        history.push(location.state.from ||'/');
+    const goBack=()=>{ 
+        if(location.pathname===`${url}/cast`||location.pathname===`${url}/reviews`){
+            history.push(location?.state?.from?.state?.from?.state?.from || location?.state?.from?.state?.from || '/')
+        }        
+        if (location.pathname===`${url}`){
+            history.push(location?.state?.from || `/`)
+        }
     }         
    
     return <> 
@@ -85,18 +90,19 @@ const MovieDetailsPage=()=> {
             </div>
             <div>
                  <NavLink
+                    exact
                     to={{pathname:`${url}/cast`,
                           state:{from:location}}}
-                    className="NavLink"
-                    activeClassName="NavLink--active">
+                    className={s.NavLink}
+                    activeClassName={s.NavLinkActive}>
                      Cast
                  </NavLink>
 
                  <NavLink
                    to={{pathname:`${url}/reviews`,
                        state:{from:location}}}
-                   className="NavLink"
-                   activeClassName="NavLink--active">
+                   className={s.NavLink}
+                   activeClassName={s.NavLinkActive}>
                    Reviews
                 </NavLink>  
             </div>

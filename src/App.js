@@ -1,7 +1,7 @@
 import React,{lazy, Suspense} from 'react';
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {Route,Switch} from 'react-router-dom';
+import {Route,Switch,Redirect} from 'react-router-dom';
 import Navigation from './Components/Navigation';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from './Components/Loader';
@@ -17,15 +17,15 @@ const App=()=>(<>
     <Suspense fallback={<Loader/>}>
     <Switch>
     <Route path="/" exact>
-        <HomePage/>
+    <HomePage/>
     </Route>
     <Route path="/movies" exact>
-        <MoviesPage/>
+    <MoviesPage/>
     </Route>
     <Route path='/movies/:slug'>
-        <MovieDetailsPage/>
+    <MovieDetailsPage/>
     </Route>
-    
+    <Route render={() => <Redirect to={{pathname: "/"}} />} />
 
     </Switch>
     </Suspense>
